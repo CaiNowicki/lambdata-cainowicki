@@ -2,17 +2,21 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import numpy as np
 
+
 def null_check(dataframe):
-    """Checks a dataframe for null values and returns which columns contain null values"""
+    """Checks a dataframe for null values and returns
+        which columns contain null values"""
     series = dataframe.isnull().any()
     null_columns = pd.DataFrame(series, columns=['Nulls'])
     null = False
     for i in range(len(null_columns)):
-        if null_columns['Nulls'].iloc[i] == True:
-            print('Column', '"', null_columns.index[i], '"', 'contains null values')
+        if null_columns['Nulls'].iloc[i]:
+            print('Column', '"', null_columns.index[i],
+                  '"', 'contains null values')
             null = True
-    if null == False:
+    if null is False:
         print('Your dataframe contains no null values')
+
 
 def train_test_val_split(dataframe):
     """Splits a dataframe into train, test, val frames"""
@@ -20,8 +24,10 @@ def train_test_val_split(dataframe):
     train, val = train_test_split(train, train_size=0.8)
     return train, val, test
 
+
 def create_X_y(train, val, test, target):
-    """Given train, test, val dataframes and target column, creates X_ and y_ dataframes for model building"""
+    """Given train, test, val dataframes and target column,
+        creates X_ and y_ dataframes for model building"""
     X_train = train.drop(target, axis=1)
     y_train = train[target]
     X_val = val.drop(target, axis=1)
@@ -32,15 +38,16 @@ def create_X_y(train, val, test, target):
 
 
 def parse_dates(dataframe, date_column):
-    """Convert a column ISO-8601 formatted time stamp strings to separate columns for each portion"""
+    """Convert a column ISO-8601 formatted time stamp strings
+     to separate columns for each portion"""
     pd.options.mode.chained_assignment = None
-
     dataframe['year'] = np.NaN
     dataframe['month'] = np.NaN
     dataframe['day'] = np.NaN
     dataframe['hour'] = np.NaN
     dataframe['minute'] = np.NaN
     dataframe['second'] = np.NaN
+
     for i in range(len(dataframe)):
         timestamp = dataframe[date_column].iloc[i]
         year = timestamp[0:4]
@@ -58,13 +65,14 @@ def parse_dates(dataframe, date_column):
         error_test = error_test.replace('-', '')
         error_test = error_test.replace('T', '')
 
-        if error_test.isdigit() == False:
+        if error_test.isdigit() is False:
             raise ValueError('Not a valid datetime string')
         elif len(error_test) < 8:
-            raise ValueError('Not a valid datetime string')
+            raise ValueError('Not enough digits in datetime string')
 
         if month > 12:
             raise ValueError('Not a valid month')
+
         if day > 31:
             raise ValueError('Not a valid day')
 
@@ -81,6 +89,7 @@ def parse_dates(dataframe, date_column):
                     dataframe['hour'].iloc[i] = hour
             elif timestamp[13] != ':':
                 raise ValueError('Invalid time separator')
+
             if len(timestamp) >= 16:
                 minute = int(timestamp[14:16])
                 minute = int(minute)
@@ -94,6 +103,7 @@ def parse_dates(dataframe, date_column):
                     dataframe['minute'].iloc[i] = minute
                 elif timestamp[16] != ':':
                     raise ValueError('Invalid time separator')
+
             if len(timestamp) >= 19:
                 second = int(timestamp[17:19])
                 second = int(second)
@@ -106,16 +116,16 @@ def parse_dates(dataframe, date_column):
                     dataframe['hour'].iloc[i] = hour
                     dataframe['minute'].iloc[i] = minute
                     dataframe['second'].iloc[i] = second
+
         else:
             dataframe['year'].iloc[i] = year
             dataframe['month'].iloc[i] = month
             dataframe['day'].iloc[i] = day
+
     date_cols = ['year', 'month', 'day', 'hour', 'minute', 'second']
+
     for item in date_cols:
         if dataframe[item].isnull().all():
             dataframe = dataframe.drop(item, axis=1)
         else:
             dataframe[item] = dataframe[item].astype(int)
-
-
-
