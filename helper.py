@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 def null_check(dataframe):
+    """Checks a dataframe for null values and returns which columns contain null values"""
     series = dataframe.isnull().any()
     null_columns = pd.DataFrame(series, columns=['Nulls'])
     null = False
@@ -14,11 +15,13 @@ def null_check(dataframe):
         print('Your dataframe contains no null values')
 
 def train_test_val_split(dataframe):
+    """Splits a dataframe into train, test, val frames"""
     train, test = train_test_split(dataframe, train_size=0.9)
     train, val = train_test_split(train, train_size=0.8)
     return train, val, test
 
 def create_X_y(train, val, test, target):
+    """Given train, test, val dataframes and target column, creates X_ and y_ dataframes for model building"""
     X_train = train.drop(target, axis=1)
     y_train = train[target]
     X_val = val.drop(target, axis=1)
@@ -29,7 +32,7 @@ def create_X_y(train, val, test, target):
 
 
 def parse_dates(dataframe, date_column):
-    """Parse an ISO-8601 formatted time stamp."""
+    """Convert a column ISO-8601 formatted time stamp strings to separate columns for each portion"""
     pd.options.mode.chained_assignment = None
 
     dataframe['year'] = np.NaN
