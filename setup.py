@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="lambdata-cainowicki", # Replace with your own username
-    version="0.0.1",
+    name="lambdata_cainowicki", # Replace with your own username
+    version="0.0.4",
     author="Cai Nowicki",
     author_email="author@example.com",
     description="My Lambdata package",
@@ -19,4 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    install_requires=['sklearn', 'pandas', 'numpy']
 )
