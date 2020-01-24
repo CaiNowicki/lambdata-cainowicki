@@ -1,6 +1,10 @@
 README.md
 setup.py
+lambdata_cainowicki/__init__.py
+lambdata_cainowicki/helper.py
+lambdata_cainowicki/helper_test.py
 lambdata_cainowicki.egg-info/PKG-INFO
 lambdata_cainowicki.egg-info/SOURCES.txt
 lambdata_cainowicki.egg-info/dependency_links.txt
+lambdata_cainowicki.egg-info/requires.txt
 lambdata_cainowicki.egg-info/top_level.txt
